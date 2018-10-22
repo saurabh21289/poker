@@ -32,7 +32,6 @@ def do_admin_login():
 @app.route('/sessions')
 def sessions(username, session_type):
     if session_type == "create":
-        # return "New session created"
         return render_template('session.html', username=username)
     else:
         return "Something else.."
