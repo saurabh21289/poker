@@ -8,7 +8,7 @@ socket.on( 'connect', function() {
     e.preventDefault()
     let user_name = $( 'input.username' ).val()
     socket.emit( 'session', {
-      user_name : user_name,
+      username : username,
     } )
   } )
 } )

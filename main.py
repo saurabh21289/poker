@@ -1,10 +1,19 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from flask_socketio import SocketIO
 
-class admin:
-    username = ""
-    def test():
-        print("Works~!")
+id = 1
+objects = []
+
+class user:
+    def __init__(self, username, admin_status):
+        global id
+        self.admin = admin_status
+        self.user_id = id
+        id = id + 1
+        self.username = username
+
+        def test():
+            print("Works~!")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
@@ -32,8 +41,14 @@ def do_admin_login():
 @app.route('/sessions')
 def sessions(username, session_type):
     if session_type == "create":
+        admin_status = True
+        user_object = user(username, admin_status)
+        objects.append(user_object)
         return render_template('session.html', username=username)
     else:
+        admin_status = False
+        user_object = user(username, admin_status)
+        objects.append(user_object)
         return "Something else.."
 
 @app.route("/logout")
@@ -46,6 +61,7 @@ def messageReceived(methods=['GET', 'POST']):
 
 @socketio.on('my event')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print("Number of users=", len(objects))
     print('received my event: ' + str(json))
     socketio.emit('my response', json, callback=messageReceived)
 
